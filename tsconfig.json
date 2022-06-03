@@ -1,0 +1,9 @@
+{
+  "include": ["src"],
+  "compilerOptions": {
+    "outDir": "build",
+    "target": "ES5",
+    "module": "UMD",
+    "lib": ["ES5", "DOM"]
+  }
+}

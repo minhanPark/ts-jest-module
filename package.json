@@ -1,0 +1,15 @@
+{
+  "name": "ts-jest-module",
+  "version": "0.0.1",
+  "description": "ts-jest-common-module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "RunningWater",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^17.0.38",
+    "typescript": "^4.7.2"
+  }
+}
