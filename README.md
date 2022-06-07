@@ -7,9 +7,9 @@ typescript jest test module
 - [x] tsconfig 파일 작성하기
 - [x] webpack.config 파일에 ts 모듈 추가하기
 - [x] 웹팩 빌드 시 build 디렉토리 비우기(develop,prod mode 인지에 따라서 파일이 달라질 수 있으니)
-- [ ] webpack.config에 html 플러그인 추가
-- [ ] webpack을 development 모드와 production 나눠보기
-- [ ] 타입스크립트 코드 빌드 해보기
+- [x] webpack.config에 html 플러그인 추가
+- [x] webpack을 development 모드와 production 나눠보기
+- [x] 타입스크립트 코드 빌드 해보기
 - [ ] 타입스크립트 테스트 코드 환경 추가하기
 - [ ] 타입스크립트 테스트 코드 추가하기
 - [ ] 통합 테스트 코드 추가하기
@@ -108,3 +108,125 @@ module.exports = {
 ```
 
 위와 같은 식으로 사용하면 된다.
+
+### webpack.config에 html 플러그인 추가
+
+html template plugin은 HTML을 동적으로 생성할 수 있는 플러그인이다.
+
+```bash
+ npm i -D html-webpack-plugin
+```
+
+해당 형태로 다운로드 할 수 있다.
+
+```js
+// webpack.config.js
+
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+module.exports = {
+  plugins: [new HtmlWebpackPlugin()],
+};
+```
+
+기본적으로 위와 같은 형태로 만들면 output.path에 index.html을 만들어줄것이다.
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Webpack App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script defer src="index.js"></script>
+  </head>
+  <body></body>
+</html>
+```
+
+기본 형태는 위와 같고, 빌드한 결과물(스크립트 파일)을 주입시켜서 만들어주는 형태이다. 여기에서 기존에 있는 html 파일을 활용해서 스크립트 파일을 추가하고 싶다면 template 속성을 이용하면 된다.
+
+```js
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+module.exports = {
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "./src/index.html",
+      minify: true,
+    }),
+  ],
+};
+```
+
+위처럼 옵션을 주면 기존에 src/index.html 파일에 빌드된 스크립트를 추가해주는 형태로 결과물이 만들어질 것이다.  
+minify 속성에 true를 주었기 때문에 압축된 형태의 html이 나오게 된다.
+
+### webpack을 development 모드와 production 나눠보기
+
+development와 production의 빌드 목표는 다르다. 해당 프로젝트에서도 development에서는 빌드 결과물을 index.html에 바로 삽입한 결과물이 필요했고, production에서는 index.js라는 결과물만 필요한 상황이었다.  
+이럴 경우 웹팩 설정을 분리하여 작성할 수 있다.  
+즉 공통-dev-prod 형태로 나눠서 dev나 prod가 공통부분에 더해져서 config파일을 만들어내는 것이다.  
+해당 부분을 처리하기 위해서는 webpack-merge가 필요하다.
+
+```cmd
+npm install --save-dev webpack-merge
+```
+
+해당 모듈이 webpack.[dev|prod].js 파일을 합쳐준다.
+
+```js
+// webpack.common.js
+const path = require("path");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+
+module.exports = {
+  entry: "./src/index.ts",
+  module: {
+    rules: [{ test: /\.ts$/, use: "ts-loader" }],
+  },
+  resolve: {
+    extensions: [".ts", ".js"],
+  },
+  plugins: [new CleanWebpackPlugin()],
+  output: {
+    path: path.resolve(__dirname, "./build"),
+    filename: "index.js",
+  },
+};
+
+//webpack.dev.js
+const { merge } = require("webpack-merge");
+const common = require("./webpack.common.js");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+module.exports = merge(common, {
+  mode: "development",
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "./src/index.html",
+      minify: true,
+    }),
+  ],
+});
+
+//webpack.prod.js
+const { merge } = require("webpack-merge");
+const common = require("./webpack.common.js");
+
+module.exports = merge(common, {
+  mode: "production",
+});
+```
+
+위의 코드를 확인해보면 웹팩의 공통 설정(entry, output, 공통 plugin, 공통 loader)은 webpack.common.js에 정의한다.  
+그리고 prod나 dev에는 각자 필요한 설정만을 추가한 후에 common부분과 merge 해준다.
+
+```json
+"scripts": {
+    "dev": "webpack --config webpack.dev.js",
+    "prod": "webpack --config webpack.prod.js",
+  }
+```
+
+그리고 스크립트를 실행할 때 --config 옵션으로 각각을 지정해주면 된다.
