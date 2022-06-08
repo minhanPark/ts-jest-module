@@ -230,3 +230,12 @@ module.exports = merge(common, {
 ```
 
 그리고 스크립트를 실행할 때 --config 옵션으로 각각을 지정해주면 된다.
+
+### 타입스크립트 테스트 코드 환경 추가하기
+
+```bash
+npm i -D jest @types/jest ts-jest
+```
+
+ts-jest는 타입스크립트 전처리기다. 해당 모듈로 타입스크립트로 적은 코드를 jest로 테스트할 수 있다.  
+@types/jest는 jest의 타입 모듈이다.

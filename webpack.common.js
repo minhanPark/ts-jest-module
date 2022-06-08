@@ -2,7 +2,7 @@ const path = require("path");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = {
-  entry: "./src/index.ts",
+  entry: ["whatwg-fetch", "./src/index.ts"],
   module: {
     rules: [{ test: /\.ts$/, use: "ts-loader" }],
   },
