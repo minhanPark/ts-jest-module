@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -8,7 +8,32 @@
   </head>
   <body>
     <div>
-      <button>버튼을 누릅니다</button>
+      <h1>모듈 테스트</h1>
+      <button id="payment-btn">버튼을 누릅니다</button>
     </div>
+    <script>
+      const optpay = OptPayments(
+        "test_7a588fbe8915dcb4b11e8bb088b476b43aedc960"
+      );
+      const paymentBtn = document.getElementById("payment-btn");
+
+      paymentBtn.addEventListener("click", function () {
+        optpay.requestPayment({
+          method: "CARD",
+          amount: 1000,
+          orderId: "xxxxxxx-xxxxxx-xxxx-xxxx",
+          orderName: "테스트주문",
+          goodsName: "카카오몽셀",
+          name: "홍길동",
+          email: "gildong@naver.dcc",
+          mobileNumber: "01055541215",
+          address: "부산진구 부전로",
+          zipCode: "15151",
+          merchantReceiveUrl: "http://112.175.117.102:5555",
+          mallId: "test_merchant_id",
+          mallName: "test_merchant",
+        });
+      });
+    </script>
   </body>
 </html>

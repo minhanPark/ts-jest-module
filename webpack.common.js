@@ -13,5 +13,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "./build"),
     filename: "index.js",
+    library: "OptPayments",
+    libraryTarget: "umd",
   },
 };

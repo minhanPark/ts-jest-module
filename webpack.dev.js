@@ -8,6 +8,8 @@ module.exports = merge(common, {
     new HtmlWebpackPlugin({
       template: "./src/index.html",
       minify: true,
+      scriptLoading: "blocking",
+      inject: "head",
     }),
   ],
 });
