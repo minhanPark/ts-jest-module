@@ -233,9 +233,32 @@ module.exports = merge(common, {
 
 ### 타입스크립트 테스트 코드 환경 추가하기
 
+기본적으로 jest는 타입스크립트를 해석할 수 없다. 그래서 타입스크립트로 된 파일을 변환해주는 transformer가 필요한데 해당 역할을 하는 것이 **ts-jest**이다.
+
+> Unexpected reserved word 'interface'.
+
+만약 jest 설정을 제대로 해주지 않으면 위와같이 해석이 불가하다고 뜰 것이다.
+
 ```bash
 npm i -D jest @types/jest ts-jest
 ```
 
-ts-jest는 타입스크립트 전처리기다. 해당 모듈로 타입스크립트로 적은 코드를 jest로 테스트할 수 있다.  
-@types/jest는 jest의 타입 모듈이다.
+ts-jest는 타입스크립트 변환기  
+jest는 자바스크립트 테스팅 라이브러리  
+@types/jest는 jest의 타입을 정의한 모듈
+
+```bash
+npx ts-jest config:init
+```
+
+해당 명령어를 실행하면 jest.config.js 파일이 생성된다.
+
+```js
+/** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
+module.exports = {
+  preset: "ts-jest",
+  testEnvironment: "node",
+};
+```
+
+해당 파일의 내용은 위와 같다.

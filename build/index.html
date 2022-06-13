@@ -1,11 +1,11 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>테스트</title><script src="index.js"></script></head><body><div><h1>모듈 테스트</h1><button id="payment-btn">버튼을 누릅니다</button></div><script>const optpay = OptPayments(
+<!doctype html><html lang="ko"><head><meta charset="UTF-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>테스트</title><script src="index.js"></script></head><body><div><h1>모듈 테스트</h1><button id="payment-btn">버튼을 누릅니다</button></div><script>const optpay = OptPayments(
         "test_7a588fbe8915dcb4b11e8bb088b476b43aedc960"
       );
       const paymentBtn = document.getElementById("payment-btn");
 
       paymentBtn.addEventListener("click", function () {
         optpay.requestPayment({
-          method: "CARD",
+          method: "",
           amount: 1000,
           orderId: "xxxxxxx-xxxxxx-xxxx-xxxx",
           orderName: "테스트주문",
